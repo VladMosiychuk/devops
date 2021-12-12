@@ -1,0 +1,10 @@
+[Unit]
+Description=Copy files from folder1 to folder2.
+
+[Service]
+User=root
+ExecStart=/vagrant/move-files.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
