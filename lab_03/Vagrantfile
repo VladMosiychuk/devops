@@ -1,0 +1,8 @@
+Vagrant.configure("2") do |config|
+
+    # Set VirtualBox image
+    config.vm.box = "centos/7"
+  
+    # Provisioning script to run
+    config.vm.provision "shell", path: "task.sh"
+  end
