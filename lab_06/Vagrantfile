@@ -1,0 +1,27 @@
+Vagrant.configure("2") do |config|
+
+  # Set VirtualBox image
+  config.vm.box = "centos/7"
+
+  # VirtualBox disks directory
+  disks_path = File.expand_path('disks')
+
+  # Create disks directory
+  Dir.mkdir(disks_path) unless Dir.exist?(disks_path)
+
+  config.vm.provider "virtualbox" do | vb |
+    
+    # Connect new SATA controller if there is no disks yet
+    vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata"] if Dir.empty?(disks_path)
+
+    # Create disks and attach them to our VM
+    for i in 1..4
+      disk_path = File.join(disks_path, "drive_#{i}.vdi")
+      vb.customize ["createhd", "--filename", disk_path, "--size", 300] unless File.exist?(disk_path)
+      vb.customize ["storageattach", :id, "--storagectl", "SATA", "--port", i, "--device", 0, "--type", "hdd", "--medium", disk_path]
+    end
+  end
+  
+  # Provisioning script to run
+  config.vm.provision "shell", path: "task.sh"
+end

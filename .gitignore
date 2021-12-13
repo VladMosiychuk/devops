@@ -1,2 +1,6 @@
 # Ignore Vagrant files
 .vagrant/
+
+# Ignore VirtualBox Device Images
+disks/
+*.vdi
